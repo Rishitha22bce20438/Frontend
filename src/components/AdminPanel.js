@@ -15,7 +15,7 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/leaves/all`, {
+        const response = await axios.get(`${API_BASE_URL}/leaves/all`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         const allApplications = response.data;
@@ -33,7 +33,7 @@ const AdminPanel = () => {
 
   const handleApproval = async (id) => {
     try {
-      await axios.post(`${API_BASE_URL}/api/leaves/approve`, { applicationId: id }, {
+      await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId: id }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const updatedApp = applications.find(app => app._id === id);
@@ -47,7 +47,7 @@ const AdminPanel = () => {
 
   const handleRejection = async (id) => {
     try {
-      await axios.post(`${API_BASE_URL}/api/leaves/reject`, { applicationId: id }, {
+      await axios.post(`${API_BASE_URL}/leaves/reject`, { applicationId: id }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       const updatedApp = applications.find(app => app._id === id);

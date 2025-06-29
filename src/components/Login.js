@@ -15,7 +15,7 @@ const Login = () => {
       const API_BASE_URL = process.env.NODE_ENV === 'production' 
         ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com/prod' 
         : 'http://localhost:8080';
-      const response = await axios.post(`${API_BASE_URL}/api/login`, { email, password });
+      const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
       const { token, role } = response.data;
 
       // Store the token and role in localStorage

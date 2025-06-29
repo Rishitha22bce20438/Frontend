@@ -21,7 +21,7 @@ const Register = () => {
         ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com/prod' 
         : 'http://localhost:8080';
 
-      const response = await axios.post(`${API_BASE_URL}/api/register`, { 
+      const response = await axios.post(`${API_BASE_URL}/register`, { 
         username, 
         email, 
         password, 

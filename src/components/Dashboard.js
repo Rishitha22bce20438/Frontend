@@ -16,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/user/details`, {
+        const response = await axios.get(`${API_BASE_URL}/user/details`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setUsername(response.data.username);
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
     const fetchBalance = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/leaves/balance`, {
+        const response = await axios.get(`${API_BASE_URL}/leaves/balance`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setBalance(response.data);
@@ -40,7 +40,7 @@ const Dashboard = () => {
 
     const fetchApplications = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/api/leaves/history`, {
+        const response = await axios.get(`${API_BASE_URL}/leaves/history`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setApplications(response.data);
