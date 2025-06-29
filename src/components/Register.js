@@ -18,7 +18,7 @@ const Register = () => {
     }
     try {
       const API_BASE_URL = process.env.NODE_ENV === 'production' 
-        ? 'https://leavemanagement-qaub.onrender.com' 
+        ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com/prod' 
         : 'http://localhost:8080';
 
       const response = await axios.post(`${API_BASE_URL}/api/register`, { 

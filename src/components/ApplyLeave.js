@@ -12,7 +12,7 @@ const ApplyLeave = () => {
 
   // Define API base URL based on environment
   const API_BASE_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://leavemanagement-qaub.onrender.com' 
+    ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com/prod' 
     : 'http://localhost:8080';
 
   const validateDateRange = (startDate, endDate) => {
