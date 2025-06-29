@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com/prod' 
+  ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
   : 'http://localhost:8080';
 
 const AdminPanel = () => {
