@@ -12,9 +12,10 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const API_BASE_URL = process.env.NODE_ENV === 'production' 
-        ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
-        : 'http://localhost:8080';
+      // const API_BASE_URL = process.env.NODE_ENV === 'production' 
+      //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
+      //   : 'http://localhost:8080';
+      const API_BASE_URL='https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
       const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
       const { token, role } = response.data;
 

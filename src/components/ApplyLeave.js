@@ -11,9 +11,10 @@ const ApplyLeave = () => {
   const navigate = useNavigate();
 
   // Define API base URL based on environment
-  const API_BASE_URL = process.env.NODE_ENV === 'production' 
-    ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
-    : 'http://localhost:8080';
+  // const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
+  //   : 'http://localhost:8080';
+  const API_BASE_URL='https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
 
   const validateDateRange = (startDate, endDate) => {
     const start = new Date(startDate);

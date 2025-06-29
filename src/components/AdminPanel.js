@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
-  : 'http://localhost:8080';
-
+// const API_BASE_URL = process.env.NODE_ENV === 'production' 
+//   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
+//   : 'http://localhost:8080';
+const API_BASE_URL='https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
 const AdminPanel = () => {
   const [applications, setApplications] = useState([]);
   const [grantedApplications, setGrantedApplications] = useState([]);
