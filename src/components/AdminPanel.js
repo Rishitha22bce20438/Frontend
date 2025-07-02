@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
-// const API_BASE_URL = process.env.NODE_ENV === 'production' 
-//   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
-//   : 'http://localhost:8080';
-const API_BASE_URL='https://1nuu3c7hw7.execute-api.us-west-1.amazonaws.com/dev'
+// Use your API base URL
+const API_BASE_URL = 'https://1nuu3c7hw7.execute-api.us-west-1.amazonaws.com/dev';
 
 const AdminPanel = () => {
   const [applications, setApplications] = useState([]);
@@ -13,6 +11,7 @@ const AdminPanel = () => {
   const [rejectedApplications, setRejectedApplications] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch all leave applications on mount
   useEffect(() => {
     const fetchApplications = async () => {
       try {
@@ -32,34 +31,35 @@ const AdminPanel = () => {
     fetchApplications();
   }, []);
 
-  const handleApproval = async (applicationId) => {
-  try {
-    await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId }, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    });
+  // Approve handler (uses _id, sends as applicationId)
+  const handleApproval = async (id) => {
+    try {
+      await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId: id }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
 
-    const updatedApp = applications.find(app => app.applicationId === applicationId);
+      const updatedApp = applications.find(app => app._id === id);
 
-    setApplications(prevApps =>
-      prevApps.map(app =>
-        app.applicationId === applicationId ? { ...app, status: 'approved' } : app
-      )
-    );
+      setApplications(prevApps =>
+        prevApps.map(app =>
+          app._id === id ? { ...app, status: 'approved' } : app
+        )
+      );
 
-    setGrantedApplications(prevGrants => [
-      ...prevGrants,
-      { ...updatedApp, status: 'approved' }
-    ]);
+      setGrantedApplications(prevGrants => [
+        ...prevGrants,
+        { ...updatedApp, status: 'approved' }
+      ]);
 
-    setRejectedApplications(prevRejects =>
-      prevRejects.filter(app => app.applicationId !== applicationId)
-    );
-  } catch (error) {
-    console.error('Error approving leave application:', error);
-  }
-};
+      setRejectedApplications(prevRejects =>
+        prevRejects.filter(app => app._id !== id)
+      );
+    } catch (error) {
+      console.error('Error approving leave application:', error);
+    }
+  };
 
-
+  // Reject handler (uses _id, sends as applicationId)
   const handleRejection = async (id) => {
     try {
       await axios.post(`${API_BASE_URL}/leaves/reject`, { applicationId: id }, {
@@ -74,12 +74,13 @@ const AdminPanel = () => {
     }
   };
 
+  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
-  // Styles (consistent with other components)
+  // Styles
   const styles = {
     container: {
       maxWidth: '800px',
@@ -159,15 +160,14 @@ const AdminPanel = () => {
       marginBottom: '1rem',
     },
     tableHeader: {
-  backgroundColor: '#f5f7fa',   // Lighter, softer background
-  fontWeight: 'bold',
-  padding: '0.5rem',            // Smaller padding for a more compact look
-  textAlign: 'left',
-  borderBottom: '1px solid #e1e5eb',  // Lighter border
-  color: '#4a5568',             // Softer, less contrast text color
-  fontSize: '0.85rem'           // Smaller font size
-}
-,
+      backgroundColor: '#f5f7fa',
+      fontWeight: 'bold',
+      padding: '0.5rem',
+      textAlign: 'left',
+      borderBottom: '1px solid #e1e5eb',
+      color: '#4a5568',
+      fontSize: '0.85rem'
+    },
     tableRow: {
       borderBottom: '1px solid #eee',
     },
@@ -212,7 +212,6 @@ const AdminPanel = () => {
           <li style={styles.navItem}>
             <Link to="/about" style={styles.navLink}>About</Link>
           </li>
-          
         </ul>
       </nav>
 
@@ -246,13 +245,13 @@ const AdminPanel = () => {
                 <td style={styles.tableCell}>{new Date(app.endDate).toDateString()}</td>
                 <td style={styles.tableCell}>{app.status}</td>
                 <td style={styles.tableCell}>
-                  <button 
+                  <button
                     onClick={() => handleApproval(app._id)}
                     style={{ ...styles.actionButton, ...styles.approveButton }}
                   >
                     Approve
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleRejection(app._id)}
                     style={{ ...styles.actionButton, ...styles.rejectButton }}
                   >
