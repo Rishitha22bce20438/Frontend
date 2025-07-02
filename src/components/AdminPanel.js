@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
-// Use your API base URL
 const API_BASE_URL = 'https://1nuu3c7hw7.execute-api.us-west-1.amazonaws.com/dev';
 
 const AdminPanel = () => {
@@ -11,7 +10,6 @@ const AdminPanel = () => {
   const [rejectedApplications, setRejectedApplications] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch all leave applications on mount
   useEffect(() => {
     const fetchApplications = async () => {
       try {
@@ -31,18 +29,18 @@ const AdminPanel = () => {
     fetchApplications();
   }, []);
 
-  // Approve handler (uses _id, sends as applicationId)
-  const handleApproval = async (id) => {
+  // Always use applicationId for backend communication
+  const handleApproval = async (applicationId) => {
     try {
-      await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId: id }, {
+      await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
 
-      const updatedApp = applications.find(app => app._id === id);
+      const updatedApp = applications.find(app => app.applicationId === applicationId);
 
       setApplications(prevApps =>
         prevApps.map(app =>
-          app._id === id ? { ...app, status: 'approved' } : app
+          app.applicationId === applicationId ? { ...app, status: 'approved' } : app
         )
       );
 
@@ -52,29 +50,40 @@ const AdminPanel = () => {
       ]);
 
       setRejectedApplications(prevRejects =>
-        prevRejects.filter(app => app._id !== id)
+        prevRejects.filter(app => app.applicationId !== applicationId)
       );
     } catch (error) {
       console.error('Error approving leave application:', error);
     }
   };
 
-  // Reject handler (uses _id, sends as applicationId)
-  const handleRejection = async (id) => {
+  const handleRejection = async (applicationId) => {
     try {
-      await axios.post(`${API_BASE_URL}/leaves/reject`, { applicationId: id }, {
+      await axios.post(`${API_BASE_URL}/leaves/reject`, { applicationId }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-      const updatedApp = applications.find(app => app._id === id);
-      setApplications(prevApps => prevApps.map(app => app._id === id ? { ...app, status: 'rejected' } : app));
-      setRejectedApplications(prevRejects => [...prevRejects, { ...updatedApp, status: 'rejected' }]);
-      setGrantedApplications(prevGrants => prevGrants.filter(app => app._id !== id));
+
+      const updatedApp = applications.find(app => app.applicationId === applicationId);
+
+      setApplications(prevApps =>
+        prevApps.map(app =>
+          app.applicationId === applicationId ? { ...app, status: 'rejected' } : app
+        )
+      );
+
+      setRejectedApplications(prevRejects => [
+        ...prevRejects,
+        { ...updatedApp, status: 'rejected' }
+      ]);
+
+      setGrantedApplications(prevGrants =>
+        prevGrants.filter(app => app.applicationId !== applicationId)
+      );
     } catch (error) {
       console.error('Error rejecting leave application:', error);
     }
   };
 
-  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
@@ -237,7 +246,7 @@ const AdminPanel = () => {
           </thead>
           <tbody>
             {applications.filter(app => app.status === 'pending').map(app => (
-              <tr key={app._id} style={styles.tableRow}>
+              <tr key={app.applicationId}>
                 <td style={styles.tableCell}>{app.userId?.username || 'Unknown'}</td>
                 <td style={styles.tableCell}>{app.userId?.email || 'Unknown'}</td>
                 <td style={styles.tableCell}>{app.leaveType}</td>
@@ -246,13 +255,13 @@ const AdminPanel = () => {
                 <td style={styles.tableCell}>{app.status}</td>
                 <td style={styles.tableCell}>
                   <button
-                    onClick={() => handleApproval(app._id)}
+                    onClick={() => handleApproval(app.applicationId)}
                     style={{ ...styles.actionButton, ...styles.approveButton }}
                   >
                     Approve
                   </button>
                   <button
-                    onClick={() => handleRejection(app._id)}
+                    onClick={() => handleRejection(app.applicationId)}
                     style={{ ...styles.actionButton, ...styles.rejectButton }}
                   >
                     Reject
@@ -278,7 +287,7 @@ const AdminPanel = () => {
           </thead>
           <tbody>
             {grantedApplications.map(app => (
-              <tr key={app._id} style={styles.tableRow}>
+              <tr key={app.applicationId}>
                 <td style={styles.tableCell}>{app.userId?.username || 'Unknown'}</td>
                 <td style={styles.tableCell}>{app.userId?.email || 'Unknown'}</td>
                 <td style={styles.tableCell}>{app.leaveType}</td>
@@ -305,7 +314,7 @@ const AdminPanel = () => {
           </thead>
           <tbody>
             {rejectedApplications.map(app => (
-              <tr key={app._id} style={styles.tableRow}>
+              <tr key={app.applicationId}>
                 <td style={styles.tableCell}>{app.userId?.username || 'Unknown'}</td>
                 <td style={styles.tableCell}>{app.userId?.email || 'Unknown'}</td>
                 <td style={styles.tableCell}>{app.leaveType}</td>
