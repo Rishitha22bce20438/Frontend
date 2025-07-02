@@ -12,7 +12,7 @@ const Dashboard = () => {
   // const API_BASE_URL = process.env.NODE_ENV === 'production' 
   //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
   //   : 'http://localhost:8080';
-  const API_BASE_URL='https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
+  const API_BASE_URL='https://lnvm7o3rb6.execute-api.us-west-1.amazonaws.com/dev'
 
   useEffect(() => {
     const fetchUserDetails = async () => {
