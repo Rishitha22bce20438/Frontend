@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
 //   : 'http://localhost:8080';
 const API_BASE_URL='https://lnvm7o3rb6.execute-api.us-west-1.amazonaws.com/dev'
+
 const AdminPanel = () => {
   const [applications, setApplications] = useState([]);
   const [grantedApplications, setGrantedApplications] = useState([]);
@@ -31,19 +32,33 @@ const AdminPanel = () => {
     fetchApplications();
   }, []);
 
-  const handleApproval = async (id) => {
-    try {
-      await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId: id }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      const updatedApp = applications.find(app => app._id === id);
-      setApplications(prevApps => prevApps.map(app => app._id === id ? { ...app, status: 'approved' } : app));
-      setGrantedApplications(prevGrants => [...prevGrants, { ...updatedApp, status: 'approved' }]);
-      setRejectedApplications(prevRejects => prevRejects.filter(app => app._id !== id));
-    } catch (error) {
-      console.error('Error approving leave application:', error);
-    }
-  };
+  const handleApproval = async (applicationId) => {
+  try {
+    await axios.post(`${API_BASE_URL}/leaves/approve`, { applicationId }, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+
+    const updatedApp = applications.find(app => app.applicationId === applicationId);
+
+    setApplications(prevApps =>
+      prevApps.map(app =>
+        app.applicationId === applicationId ? { ...app, status: 'approved' } : app
+      )
+    );
+
+    setGrantedApplications(prevGrants => [
+      ...prevGrants,
+      { ...updatedApp, status: 'approved' }
+    ]);
+
+    setRejectedApplications(prevRejects =>
+      prevRejects.filter(app => app.applicationId !== applicationId)
+    );
+  } catch (error) {
+    console.error('Error approving leave application:', error);
+  }
+};
+
 
   const handleRejection = async (id) => {
     try {
