@@ -1,13 +1,13 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 const About = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+    localStorage.removeItem('token')
+    navigate('/login')
+  }
 
   // Styles (consistent with other components)
   const styles = {
@@ -78,8 +78,8 @@ const About = () => {
       color: '#3498db',
       textDecoration: 'none',
       fontWeight: 'bold',
-    }
-  };
+    },
+  }
 
   return (
     <div style={styles.container}>
@@ -91,16 +91,24 @@ const About = () => {
       <nav style={styles.nav}>
         <ul style={styles.navList}>
           <li style={styles.navItem}>
-            <Link to="/dashboard" style={styles.navLink}>Home</Link>
+            <Link to="/dashboard" style={styles.navLink}>
+              Home
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/apply-leave" style={styles.navLink}>Apply Leave</Link>
+            <Link to="/apply-leave" style={styles.navLink}>
+              Apply Leave
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/about" style={styles.navLink}>About</Link>
+            <Link to="/about" style={styles.navLink}>
+              About
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <button onClick={handleLogout} style={styles.button}>Logout</button>
+            <button onClick={handleLogout} style={styles.button}>
+              Logout
+            </button>
           </li>
         </ul>
       </nav>
@@ -108,19 +116,20 @@ const About = () => {
       <div style={styles.content}>
         <h1 style={styles.title}>About Us</h1>
         <p style={styles.paragraph}>
-          Welcome to our application! We provide a streamlined and efficient way to manage and apply for leave.
-          Our goal is to simplify the leave application process and provide a user-friendly experience for both employees and administrators.
+          Welcome to our application! We provide a streamlined and efficient way to manage and apply for leave. Our goal is to simplify the leave application process and provide a user-friendly
+          experience for both employees and administrators.
         </p>
         <p style={styles.paragraph}>
           If you have any questions or feedback, please feel free to reach out to us at{' '}
-          <a href="mailto:support@example.com" style={styles.link}>support@example.com</a>.
+          <a href="mailto:support@example.com" style={styles.link}>
+            support@example.com
+          </a>
+          .
         </p>
-        <p style={styles.paragraph}>
-          Thank you for using our application!
-        </p>
+        <p style={styles.paragraph}>Thank you for using our application!</p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default About;
+export default About
