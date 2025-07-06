@@ -1,43 +1,43 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      // const API_BASE_URL = process.env.NODE_ENV === 'production' 
-      //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
+      // const API_BASE_URL = process.env.NODE_ENV === 'production'
+      //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
       //   : 'http://localhost:8080';
-      const API_BASE_URL='https://1nuu3c7hw7.execute-api.us-west-1.amazonaws.com/dev/user'
-      const response = await axios.post(`${API_BASE_URL}/login`, { email, password });
-      const { token, role } = response.data;
+      const API_BASE_URL = process.env.REACT_APP_API_URL
+      const response = await axios.post(`${API_BASE_URL}/user/login`, { email, password })
+      const { token, role } = response.data
 
       // Store the token and role in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('role', role);
+      localStorage.setItem('token', token)
+      localStorage.setItem('role', role)
 
       // Navigate based on the user's role
       if (role === 'admin') {
-        navigate('/admin');
+        navigate('/admin')
       } else {
-        navigate('/dashboard');
+        navigate('/dashboard')
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
-        setMessage(error.response.data.message);
+        setMessage(error.response.data.message)
       } else {
-        setMessage('An error occurred during login.');
+        setMessage('An error occurred during login.')
       }
-      console.error('Error during login:', error);
+      console.error('Error during login:', error)
     }
-  };
+  }
 
   // Styles (same as Register)
   const styles = {
@@ -112,8 +112,8 @@ const Login = () => {
     text: {
       textAlign: 'center',
       marginTop: '1rem',
-    }
-  };
+    },
+  }
 
   return (
     <div style={styles.container}>
@@ -123,30 +123,20 @@ const Login = () => {
       <h1 style={styles.title}>Login</h1>
       <form onSubmit={handleSubmit} style={styles.form}>
         {message && <p style={styles.message}>{message}</p>}
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-          style={styles.input}
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>Login</button>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required style={styles.input} />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required style={styles.input} />
+        <button type="submit" style={styles.button}>
+          Login
+        </button>
       </form>
       <p style={styles.text}>
         Don't have an account?{' '}
-        <a href="/register" style={styles.link}>Register</a>
+        <a href="/register" style={styles.link}>
+          Register
+        </a>
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

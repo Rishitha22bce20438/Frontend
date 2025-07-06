@@ -1,65 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Dashboard = () => {
-  const [balance, setBalance] = useState({});
-  const [applications, setApplications] = useState([]);
-  const [username, setUsername] = useState('Guest');
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [balance, setBalance] = useState({})
+  const [applications, setApplications] = useState([])
+  const [username, setUsername] = useState('Guest')
+  const [error, setError] = useState(null)
+  const navigate = useNavigate()
 
-  // const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
+  // const API_BASE_URL = process.env.NODE_ENV === 'production'
+  //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
   //   : 'http://localhost:8080';
-  const API_BASE_URL='https://1nuu3c7hw7.execute-api.us-west-1.amazonaws.com/dev'
+  const API_BASE_URL = process.env.REACT_APP_API_URL
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/user/details`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setUsername(response.data.username);
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        setUsername(response.data.username)
       } catch (error) {
-        console.error('Error fetching user details:', error);
-        setError('Failed to load user details.');
+        console.error('Error fetching user details:', error)
+        setError('Failed to load user details.')
       }
-    };
+    }
 
     const fetchBalance = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/leaves/balance`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setBalance(response.data);
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        setBalance(response.data)
       } catch (error) {
-        console.error('Error fetching balance:', error);
-        setError('Failed to load leave balance.');
+        console.error('Error fetching balance:', error)
+        setError('Failed to load leave balance.')
       }
-    };
+    }
 
     const fetchApplications = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}/leaves/history`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setApplications(response.data);
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        })
+        setApplications(response.data)
       } catch (error) {
-        console.error('Error fetching leave applications:', error);
-        setError('Failed to load leave applications.');
+        console.error('Error fetching leave applications:', error)
+        setError('Failed to load leave applications.')
       }
-    };
+    }
 
-    fetchUserDetails();
-    fetchBalance();
-    fetchApplications();
-  }, []);
+    fetchUserDetails()
+    fetchBalance()
+    fetchApplications()
+  }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+    localStorage.removeItem('token')
+    navigate('/login')
+  }
 
   // Styles (consistent with other components)
   const styles = {
@@ -147,8 +147,8 @@ const Dashboard = () => {
     },
     text: {
       marginBottom: '0.5rem',
-    }
-  };
+    },
+  }
 
   return (
     <div style={styles.container}>
@@ -160,13 +160,19 @@ const Dashboard = () => {
       <nav style={styles.nav}>
         <ul style={styles.navList}>
           <li style={styles.navItem}>
-            <Link to="/dashboard" style={styles.navLink}>Home</Link>
+            <Link to="/dashboard" style={styles.navLink}>
+              Home
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/apply-leave" style={styles.navLink}>Apply Leave</Link>
+            <Link to="/apply-leave" style={styles.navLink}>
+              Apply Leave
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/about" style={styles.navLink}>About</Link>
+            <Link to="/about" style={styles.navLink}>
+              About
+            </Link>
           </li>
         </ul>
       </nav>
@@ -174,7 +180,9 @@ const Dashboard = () => {
       {/* Dashboard Header with Logout Button */}
       <div style={styles.panelHeader}>
         <h1 style={styles.panelTitle}>Welcome, {username}!</h1>
-        <button onClick={handleLogout} style={styles.logoutButton}>Logout</button>
+        <button onClick={handleLogout} style={styles.logoutButton}>
+          Logout
+        </button>
       </div>
 
       {/* Dashboard Content */}
@@ -188,7 +196,7 @@ const Dashboard = () => {
         <h2 style={styles.sectionTitle}>Leave Applications</h2>
         <ul style={styles.list}>
           {applications.length > 0 ? (
-            applications.map(app => (
+            applications.map((app) => (
               <li key={app._id} style={styles.listItem}>
                 {app.leaveType} from {new Date(app.startDate).toDateString()} to {new Date(app.endDate).toDateString()} - Status: {app.status}
               </li>
@@ -199,7 +207,7 @@ const Dashboard = () => {
         </ul>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

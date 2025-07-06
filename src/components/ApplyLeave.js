@@ -1,57 +1,53 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import axios from 'axios'
+import { useNavigate, Link } from 'react-router-dom'
 
 const ApplyLeave = () => {
-  const [leaveType, setLeaveType] = useState('casual');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [reason, setReason] = useState('');
-  const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+  const [leaveType, setLeaveType] = useState('casual')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [reason, setReason] = useState('')
+  const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   // Define API base URL based on environment
-  // const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com' 
+  // const API_BASE_URL = process.env.NODE_ENV === 'production'
+  //   ? 'https://rs75ba83d9.execute-api.us-west-1.amazonaws.com'
   //   : 'http://localhost:8080';
-  const API_BASE_URL='https://1nuu3c7hw7.execute-api.us-west-1.amazonaws.com/dev'
+  const API_BASE_URL = process.env.REACT_APP_API_URL
 
   const validateDateRange = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = new Date(startDate)
+    const end = new Date(endDate)
     if (end < start) {
-      alert('The end date cannot be before the start date. Please correct it.');
-      return false;
+      alert('The end date cannot be before the start date. Please correct it.')
+      return false
     }
-    return true;
-  };
+    return true
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
-  };
+    localStorage.removeItem('token')
+    navigate('/login')
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!validateDateRange(startDate, endDate)) {
-      return;
+      return
     }
     try {
-      await axios.post(
-        `${API_BASE_URL}/leaves/apply`,
-        { leaveType, startDate, endDate, reason },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
-      navigate('/dashboard');
+      await axios.post(`${API_BASE_URL}/leaves/apply`, { leaveType, startDate, endDate, reason }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+      navigate('/dashboard')
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
-        setMessage(error.response.data.message);
+        setMessage(error.response.data.message)
       } else {
-        setMessage('An error occurred while applying for leave.');
+        setMessage('An error occurred while applying for leave.')
       }
-      console.error('Error applying leave:', error);
+      console.error('Error applying leave:', error)
     }
-  };
+  }
 
   // Styles (expanded for ApplyLeave)
   const styles = {
@@ -172,8 +168,8 @@ const ApplyLeave = () => {
     },
     submitButtonHover: {
       backgroundColor: '#2980b9',
-    }
-  };
+    },
+  }
 
   return (
     <div style={styles.container}>
@@ -185,16 +181,24 @@ const ApplyLeave = () => {
       <nav style={styles.nav}>
         <ul style={styles.navList}>
           <li style={styles.navItem}>
-            <Link to="/dashboard" style={styles.navLink}>Home</Link>
+            <Link to="/dashboard" style={styles.navLink}>
+              Home
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/apply-leave" style={styles.navLink}>Apply Leave</Link>
+            <Link to="/apply-leave" style={styles.navLink}>
+              Apply Leave
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <Link to="/about" style={styles.navLink}>About</Link>
+            <Link to="/about" style={styles.navLink}>
+              About
+            </Link>
           </li>
           <li style={styles.navItem}>
-            <button onClick={handleLogout} style={styles.button}>Logout</button>
+            <button onClick={handleLogout} style={styles.button}>
+              Logout
+            </button>
           </li>
         </ul>
       </nav>
@@ -205,47 +209,27 @@ const ApplyLeave = () => {
           {message && <p style={styles.message}>{message}</p>}
 
           <label style={styles.label}>Leave Type:</label>
-          <select
-            value={leaveType}
-            onChange={(e) => setLeaveType(e.target.value)}
-            style={styles.select}
-          >
+          <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)} style={styles.select}>
             <option value="casual">Casual Leave</option>
             <option value="medical">Medical Leave</option>
           </select>
 
           <label style={styles.label}>Start Date:</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-            style={styles.input}
-          />
+          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required style={styles.input} />
 
           <label style={styles.label}>End Date:</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-            style={styles.input}
-          />
+          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required style={styles.input} />
 
           <label style={styles.label}>Reason:</label>
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="Reason for leave"
-            required
-            style={styles.textarea}
-          ></textarea>
+          <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Reason for leave" required style={styles.textarea}></textarea>
 
-          <button type="submit" style={styles.submitButton}>Apply</button>
+          <button type="submit" style={styles.submitButton}>
+            Apply
+          </button>
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ApplyLeave;
+export default ApplyLeave
